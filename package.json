@@ -1,0 +1,31 @@
+{
+  "name": "audrey-heroku",
+  "version": "1.0.0",
+  "description": "A barebones Node.js app using [Express 4](http://expressjs.com/).",
+  "engines": {
+      "node": "6.11.1"
+    },
+  "main": "index.js",
+  "scripts": {
+      "start": "node index.js",
+    "test": "node index.js"
+  },
+  "dependencies": {
+    "ejs": "2.5.6",
+    "express": "4.15.2"
+  },
+  "devDependencies": {
+    "request": "^2.81.0",
+    "tape": "^4.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WearableMedia/AudRey-heroku.git"
+  },
+  "author": "Wearable Media",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WearableMedia/AudRey-heroku/issues"
+  },
+  "homepage": "https://github.com/WearableMedia/AudRey-heroku#readme"
+}
