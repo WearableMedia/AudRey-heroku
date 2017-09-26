@@ -3,17 +3,17 @@
   "version": "1.0.0",
   "description": "A barebones Node.js app using [Express 4](http://expressjs.com/).",
   "engines": {
-      "node": "6.11.1"
-    },
+    "node": "6.11.1"
+  },
   "main": "index.js",
   "scripts": {
-      "start": "node index.js",
+    "start": "node index.js",
     "test": "node index.js"
   },
   "dependencies": {
-    "ejs": "2.5.6",
-    "express": "4.15.2",
-    "color-thief": "~2.1.0"
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "get-image-colors": "^1.8.1"
   },
   "devDependencies": {
     "request": "^2.81.0",
