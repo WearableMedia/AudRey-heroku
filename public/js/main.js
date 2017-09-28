@@ -85,7 +85,7 @@ scene.add(pointLight);
 //////////////////////////////////////////////////////////////////////////////////
 var SEPARATION = 0.3,
   AMOUNTX = 5,
-  AMOUNTY = 40;
+  AMOUNTY = 20;
 var particles2 = new Array();
 var particles3 = new Array();
 var count = 0;
@@ -210,7 +210,7 @@ var smoothedControls2 = new THREEx.ArSmoothedControls(smoothedRoot2, {
 var n = 0;
 for (var i = 0; i < AMOUNTX; i++) {
   for (var j = 0; j < AMOUNTY; j++) {
-    var geometry = new THREE.SphereGeometry(0.08, 48, 24);
+    var geometry = new THREE.BoxGeometry(0.08, 0.08, 0.08);
     var material = new THREE.MeshNormalMaterial();
     var sphere = particles2[n++] = new THREE.Mesh(geometry, material);
     sphere.position.x = i * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
@@ -498,7 +498,7 @@ onRenderFcts.push(function(delta) {
 //		render the whole thing on the page
 //////////////////////////////////////////////////////////////////////////////////
 var stats = new Stats();
-document.body.appendChild(stats.dom);
+//document.body.appendChild(stats.dom);
 // render the scene
 onRenderFcts.push(function() {
   var i = 0;
