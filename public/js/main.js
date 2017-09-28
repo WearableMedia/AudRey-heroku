@@ -5,28 +5,47 @@
 //////////////////////////////////////////////////////////////////////////////////
 //		Initialize instagram
 //////////////////////////////////////////////////////////////////////////////////
-var url = '/submit/' + 'wearablemedia.studio';
 var instagram;
 var instagramColor = [];
-$.get(url, function(data) {
-  console.log(data.fullname);
-  // console.log(data.likes);
-  // console.log(data.comments);
 
-  instagram = data;
+jQuery("form").submit(function(e) {
+  e.preventDefault();
+  var handle = $("#handle").val();
+  handle = handle.trim();
+  $("#handle").val('');
+  $("#results").empty();
+  if (handle) {
+    var url = '/submit/' + handle;
+    $.get(url, function(data) {
+      console.log(data.fullname);
+      // console.log(data.likes);
+      // console.log(data.comments);
 
-  for (var i = 0; i < data.colors.length; i++) {
-    for (var j = 0; j < data.colors[i].length; j++) {
-      var newColor = {
-        r: data.colors[i][j]._rgb[0],
-        g: data.colors[i][j]._rgb[1],
-        b: data.colors[i][j]._rgb[2]
+      instagram = data;
+
+      for (var i = 0; i < data.colors.length; i++) {
+        for (var j = 0; j < data.colors[i].length; j++) {
+          var newColor = {
+            r: data.colors[i][j]._rgb[0],
+            g: data.colors[i][j]._rgb[1],
+            b: data.colors[i][j]._rgb[2]
+          }
+          instagramColor.push(newColor);
+        }
       }
-      instagramColor.push(newColor);
-    }
+      console.log(instagramColor);
+      $('.jumbotron').html('Thank you '+data.fullname+' ! Please enjoy your AudRey');
+      setTimeout(function(){
+        $('.jumbotron').hide(1000);
+      }, 2000);
+
+    });
   }
-  console.log(instagramColor);
+
+  return false;
 });
+
+
 
 // init renderer
 var renderer = new THREE.WebGLRenderer({
@@ -65,8 +84,8 @@ scene.add( pointLight );
 //		Initialize a particleSystem
 //////////////////////////////////////////////////////////////////////////////////
 var SEPARATION = 0.6,
-  AMOUNTX = 20,
-  AMOUNTY = 200;
+  AMOUNTX = 10,
+  AMOUNTY = 100;
 var particles = new Array();
 var count = 0;
 

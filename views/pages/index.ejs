@@ -5,13 +5,35 @@
   <% include ../partials/header.ejs %>
 </head>
 
-  <% include ../partials/nav.ejs %>
+<% include ../partials/nav.ejs %>
 
-    <div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
+  <!-- <div style='position: absolute; top: 10px; width:100%; text-align: center; z-index: 1;'>
       <a href="http://wearablemedia.studio/" target="_blank">AudRey</a>
+    </div> -->
+
+  <body>
+    <div class="container" id="main-container">
+      <div class="jumbotron">
+        <h1 class="display-3">AudRey</h1>
+        <p class="lead"></p>
+        <hr class="my-4">
+        <p>Enter your Instagram handle to see your own </p>
+        <p class="title-font">AudRey</p>
+        <p> garment:</p>
+
+        <form id="myForm">
+          <div class="form-group">
+            <!-- <label for="handle">Enter your Instagram handle to see your 'aura'</label> -->
+            <input type="text" class="form-control" id="handle" placeholder="Your Instagram Handle" name="handle" required>
+          </div>
+          <button type="submit" class="btn btn-outline-secondary">Submit</button>
+        </form>
+      </div>
     </div>
+
+
     <script src="/js/main.js"></script>
 
-</body>
+  </body>
 
 </html>
