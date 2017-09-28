@@ -2,6 +2,32 @@
 //		Init
 //////////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////////////
+//		Initialize instagram
+//////////////////////////////////////////////////////////////////////////////////
+var url = '/submit/' + 'wearablemedia.studio';
+var instagram;
+var instagramColor = [];
+$.get(url, function(data) {
+  console.log(data.fullname);
+  // console.log(data.likes);
+  // console.log(data.comments);
+
+  instagram = data;
+
+  for (var i = 0; i < data.colors.length; i++) {
+    for (var j = 0; j < data.colors[i].length; j++) {
+      var newColor = {
+        r: data.colors[i][j]._rgb[0],
+        g: data.colors[i][j]._rgb[1],
+        b: data.colors[i][j]._rgb[2]
+      }
+      instagramColor.push(newColor);
+    }
+  }
+  console.log(instagramColor);
+});
+
 // init renderer
 var renderer = new THREE.WebGLRenderer({
   // antialias	: true,
@@ -21,13 +47,28 @@ var onRenderFcts = [];
 // init scene and camera
 var scene = new THREE.Scene();
 
-//////////////////////////////////////////////////////////////////////////////////
-//		Initialize a basic camera
-//////////////////////////////////////////////////////////////////////////////////
 
 // Create a camera
 var camera = new THREE.Camera();
 scene.add(camera);
+
+scene.add( new THREE.AmbientLight( 0x111111 ) );
+var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
+directionalLight.position.x = Math.random() - 0.5;
+directionalLight.position.y = Math.random() - 0.5;
+directionalLight.position.z = Math.random() - 0.5;
+directionalLight.position.normalize();
+scene.add( directionalLight );
+pointLight = new THREE.PointLight( 0xffffff, 1 );
+scene.add( pointLight );
+//////////////////////////////////////////////////////////////////////////////////
+//		Initialize a particleSystem
+//////////////////////////////////////////////////////////////////////////////////
+var SEPARATION = 0.6,
+  AMOUNTX = 20,
+  AMOUNTY = 200;
+var particles = new Array();
+var count = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 //          handle arToolkitSource
@@ -97,13 +138,13 @@ onRenderFcts.push(function() {
 //		marker1
 //////////////////////////////////////////////////////////////////////////////////
 
-
+/*
 var markerRoot1 = new THREE.Group
 // markerRoot1.name = 'marker1'
 scene.add(markerRoot1)
 var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot1, {
   type: 'barcode',
-  barcodeValue: 5
+  barcodeValue: 23
 })
 
 // build a smoothedControls
@@ -115,24 +156,8 @@ var smoothedControls1 = new THREEx.ArSmoothedControls(smoothedRoot1, {
   lerpQuaternion: 0.3,
   lerpScale: 1,
 })
-
-// // add a torus knot
-// var geometry = new THREE.CubeGeometry(1, 1, 1);
-// var material = new THREE.MeshNormalMaterial({
-// 	transparent: true,
-// 	opacity: 0.5,
-// 	side: THREE.DoubleSide
-// });
-// var meshCube1 = new THREE.Mesh(geometry, material);
-// meshCube1.position.y = geometry.parameters.height / 2
-// smoothedRoot1.add(meshCube1);
-
-var geometry = new THREE.TorusKnotGeometry(0.3, 0.1, 64, 16);
-var material = new THREE.MeshNormalMaterial();
-var meshKnot1 = new THREE.Mesh(geometry, material);
-meshKnot1.position.y = 0.5
-smoothedRoot1.add(meshKnot1);
-
+*/
+// smoothedRoot1.add(particle);
 
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -143,7 +168,7 @@ var markerRoot2 = new THREE.Group
 scene.add(markerRoot2)
 var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot2, {
   type: 'barcode',
-  barcodeValue: 14
+  barcodeValue: 29
 })
 
 var smoothedRoot2 = new THREE.Group()
@@ -156,12 +181,36 @@ var smoothedControls2 = new THREEx.ArSmoothedControls(smoothedRoot2, {
 })
 
 
-var geometry = new THREE.TorusKnotGeometry(0.3, 0.1, 64, 16);
-var material = new THREE.MeshNormalMaterial();
-var meshKnot2 = new THREE.Mesh(geometry, material);
-meshKnot2.position.y = 0.5
-smoothedRoot2.add(meshKnot2);
 
+
+var n = 0;
+for (var i = 0; i < AMOUNTX; i++) {
+  for (var j = 0; j < AMOUNTY; j++) {
+    var geometry = new THREE.SphereBufferGeometry(0.1, 48, 24);
+    var material = new THREE.MeshBasicMaterial({
+      color: 0xffff00,
+      transparent: true
+    });
+    var sphere = particles[n++] = new THREE.Mesh(geometry, material);
+    sphere.position.x = i * SEPARATION  - ( ( AMOUNTX * SEPARATION ) / 2 );
+    sphere.position.z = j * SEPARATION - ( ( AMOUNTY * SEPARATION ) / 2 );
+    //sphere.position.y=0.5;
+    smoothedRoot2.add(sphere);
+
+    //console.log(particles);
+    //
+  }
+}
+
+// var m = 0;
+// for (var i = 0; i < AMOUNTX; i++) {
+//   for (var j = 0; j < AMOUNTY; j++) {
+//      particles[m].position.x = i * SEPARATION ;
+//      particles[m].position.z = j * SEPARATION;
+//      particles[m].position.y = 0.5;
+//      m++;
+//   }
+// }
 
 //////////////////////////////////////////////////////////////////////////////////
 //		marker3
@@ -188,6 +237,7 @@ var geometry = new THREE.TorusKnotGeometry(0.3, 0.1, 64, 16);
 var material = new THREE.MeshNormalMaterial();
 var meshKnot3 = new THREE.Mesh(geometry, material);
 meshKnot3.position.y = 0.5
+
 smoothedRoot3.add(meshKnot3);
 
 
@@ -195,7 +245,7 @@ smoothedRoot3.add(meshKnot3);
 //////////////////////////////////////////////////////////////////////////////////
 //		marker4
 //////////////////////////////////////////////////////////////////////////////////
-
+/*
 var markerRoot4 = new THREE.Group
 scene.add(markerRoot4)
 var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot4, {
@@ -382,16 +432,17 @@ var material = new THREE.MeshNormalMaterial();
 var meshKnot10 = new THREE.Mesh(geometry, material);
 meshKnot10.position.y = 0.5
 smoothedRoot10.add(meshKnot10);
-
+*/
 //////////////////////////////////////////////////////////////////////////////////
 //		update render
 //////////////////////////////////////////////////////////////////////////////////
 
 
 onRenderFcts.push(function(delta) {
-  meshKnot1.rotation.x += 0.1
-  meshKnot2.rotation.x += 0.1
+  //meshKnot1.rotation.x += 0.1
+  //meshKnot2.rotation.x += 0.1
   meshKnot3.rotation.x += 0.1
+  /*
   meshKnot4.rotation.x += 0.1
   meshKnot5.rotation.x += 0.1
   meshKnot6.rotation.x += 0.1
@@ -399,21 +450,26 @@ onRenderFcts.push(function(delta) {
   meshKnot8.rotation.x += 0.1
   meshKnot9.rotation.x += 0.1
   meshKnot10.rotation.x += 0.1
-
+*/
   //console.log(markerRoot1.visible);
-  if (markerRoot1.visible) {
+  if (markerRoot2.visible) {
 
   }
-  smoothedControls1.update(markerRoot1);
+  //smoothedControls1.update(markerRoot1);
   smoothedControls2.update(markerRoot2);
   smoothedControls3.update(markerRoot3);
-  smoothedControls4.update(markerRoot4);
-  smoothedControls5.update(markerRoot5);
-  smoothedControls6.update(markerRoot6);
-  smoothedControls7.update(markerRoot7);
-  smoothedControls8.update(markerRoot8);
-  smoothedControls9.update(markerRoot9);
-  smoothedControls10.update(markerRoot10);
+  /*
+    smoothedControls4.update(markerRoot4);
+    smoothedControls5.update(markerRoot5);
+    smoothedControls6.update(markerRoot6);
+    smoothedControls7.update(markerRoot7);
+    smoothedControls8.update(markerRoot8);
+    smoothedControls9.update(markerRoot9);
+    smoothedControls10.update(markerRoot10);
+    */
+
+
+
 })
 
 
@@ -425,8 +481,31 @@ var stats = new Stats();
 document.body.appendChild(stats.dom);
 // render the scene
 onRenderFcts.push(function() {
+  var i = 0;
+
+
+  for (var ix = 0; ix < AMOUNTX; ix++) {
+    for (var iy = 0; iy < AMOUNTY; iy++) {
+      var particle = particles[i++];
+      if (instagramColor.length > 0) {
+        var n = i % instagramColor.length;
+
+        particle.material.color.r = instagramColor[n].r / 255;
+        particle.material.color.g = instagramColor[n].g / 255;
+        particle.material.color.b = instagramColor[n].b / 255;
+      }
+
+      particle.position.y = (Math.sin((ix + count) * 0.3) * 0.5) +
+        (Math.sin((iy + count) * 0.5) * 0.5);
+      /*CHANGE SHIMMER OF PARTICLES*/
+      particle.scale.x = particle.scale.y = particle.scale.z = (Math.sin((ix + count) * 5) + 1) * 0.6 +
+        (Math.sin((iy + count) * 0.5) + 1) * 0.6;
+    }
+  }
+
   renderer.render(scene, camera);
   stats.update();
+  count += 0.05;
 })
 
 // run the rendering loop
@@ -438,6 +517,7 @@ requestAnimationFrame(function animate(nowMsec) {
   lastTimeMsec = lastTimeMsec || nowMsec - 1000 / 60
   var deltaMsec = Math.min(200, nowMsec - lastTimeMsec)
   lastTimeMsec = nowMsec
+
   // call each update function
   onRenderFcts.forEach(function(onRenderFct) {
     onRenderFct(deltaMsec / 1000, nowMsec / 1000)
