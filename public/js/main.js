@@ -34,8 +34,8 @@ jQuery("form").submit(function(e) {
         }
       }
       console.log(instagramColor);
-      $('.jumbotron').html('Thank you '+data.fullname+' ! Please enjoy your AudRey');
-      setTimeout(function(){
+      $('.jumbotron').html('Thank you ' + data.fullname + ' ! Please enjoy your AudRey');
+      setTimeout(function() {
         $('.jumbotron').hide(1000);
       }, 2000);
 
@@ -71,22 +71,23 @@ var scene = new THREE.Scene();
 var camera = new THREE.Camera();
 scene.add(camera);
 
-scene.add( new THREE.AmbientLight( 0x111111 ) );
-var directionalLight = new THREE.DirectionalLight( 0xffffff, 0.125 );
+scene.add(new THREE.AmbientLight(0x111111));
+var directionalLight = new THREE.DirectionalLight(0xffffff, 0.125);
 directionalLight.position.x = Math.random() - 0.5;
 directionalLight.position.y = Math.random() - 0.5;
 directionalLight.position.z = Math.random() - 0.5;
 directionalLight.position.normalize();
-scene.add( directionalLight );
-pointLight = new THREE.PointLight( 0xffffff, 1 );
-scene.add( pointLight );
+scene.add(directionalLight);
+pointLight = new THREE.PointLight(0xffffff, 1);
+scene.add(pointLight);
 //////////////////////////////////////////////////////////////////////////////////
 //		Initialize a particleSystem
 //////////////////////////////////////////////////////////////////////////////////
 var SEPARATION = 0.6,
   AMOUNTX = 10,
   AMOUNTY = 100;
-var particles = new Array();
+var particles2 = new Array();
+var particles3 = new Array();
 var count = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -117,10 +118,14 @@ window.addEventListener('resize', function() {
 
 function onResize() {
   arToolkitSource.onResize()
-  arToolkitSource.copySizeTo(renderer.domElement)
-  if (arToolkitContext.arController !== null) {
-    arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
-  }
+  setTimeout(function() {
+    console.log("resize");
+    arToolkitSource.copySizeTo(renderer.domElement)
+    if (arToolkitContext.arController !== null) {
+      arToolkitSource.copySizeTo(arToolkitContext.arController.canvas)
+    }
+  }, 2000);
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 //          initialize arToolkitContext
@@ -199,17 +204,17 @@ var smoothedControls2 = new THREEx.ArSmoothedControls(smoothedRoot2, {
   lerpScale: 1,
 })
 
+
+
+
 var n = 0;
 for (var i = 0; i < AMOUNTX; i++) {
   for (var j = 0; j < AMOUNTY; j++) {
     var geometry = new THREE.SphereBufferGeometry(0.1, 48, 24);
-    var material = new THREE.MeshBasicMaterial({
-      color: 0xffff00,
-      transparent: true
-    });
-    var sphere = particles[n++] = new THREE.Mesh(geometry, material);
-    sphere.position.x = i * SEPARATION  - ( ( AMOUNTX * SEPARATION ) / 2 );
-    sphere.position.z = j * SEPARATION - ( ( AMOUNTY * SEPARATION ) / 2 );
+    var material = new THREE.MeshNormalMaterial();
+    var sphere = particles2[n++] = new THREE.Mesh(geometry, material);
+    sphere.position.x = i * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
+    sphere.position.z = j * SEPARATION - ((AMOUNTY * SEPARATION) / 2);
     //sphere.position.y=0.5;
     smoothedRoot2.add(sphere);
 
@@ -217,16 +222,6 @@ for (var i = 0; i < AMOUNTX; i++) {
     //
   }
 }
-
-// var m = 0;
-// for (var i = 0; i < AMOUNTX; i++) {
-//   for (var j = 0; j < AMOUNTY; j++) {
-//      particles[m].position.x = i * SEPARATION ;
-//      particles[m].position.z = j * SEPARATION;
-//      particles[m].position.y = 0.5;
-//      m++;
-//   }
-// }
 
 //////////////////////////////////////////////////////////////////////////////////
 //		marker3
@@ -236,7 +231,7 @@ var markerRoot3 = new THREE.Group
 scene.add(markerRoot3)
 var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot3, {
   type: 'barcode',
-  barcodeValue: 15
+  barcodeValue: 31
 })
 
 var smoothedRoot3 = new THREE.Group()
@@ -249,12 +244,21 @@ var smoothedControls3 = new THREEx.ArSmoothedControls(smoothedRoot3, {
 })
 
 
-var geometry = new THREE.TorusKnotGeometry(0.3, 0.1, 64, 16);
-var material = new THREE.MeshNormalMaterial();
-var meshKnot3 = new THREE.Mesh(geometry, material);
-meshKnot3.position.y = 0.5
+var n = 0;
+for (var i = 0; i < AMOUNTX; i++) {
+  for (var j = 0; j < AMOUNTY; j++) {
+    var geometry = new THREE.SphereBufferGeometry(0.1, 48, 24);
+    var material = new THREE.MeshNormalMaterial();
+    var sphere = particles3[n++] = new THREE.Mesh(geometry, material);
+    sphere.position.x = i * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
+    sphere.position.z = j * SEPARATION - ((AMOUNTY * SEPARATION) / 2);
+    //sphere.position.y=0.5;
+    smoothedRoot3.add(sphere);
 
-smoothedRoot3.add(meshKnot3);
+    //console.log(particles);
+    //
+  }
+}
 
 
 
@@ -457,7 +461,7 @@ smoothedRoot10.add(meshKnot10);
 onRenderFcts.push(function(delta) {
   //meshKnot1.rotation.x += 0.1
   //meshKnot2.rotation.x += 0.1
-  meshKnot3.rotation.x += 0.1
+  //meshKnot3.rotation.x += 0.1
   /*
   meshKnot4.rotation.x += 0.1
   meshKnot5.rotation.x += 0.1
@@ -494,7 +498,7 @@ onRenderFcts.push(function(delta) {
 //		render the whole thing on the page
 //////////////////////////////////////////////////////////////////////////////////
 var stats = new Stats();
-//document.body.appendChild(stats.dom);
+document.body.appendChild(stats.dom);
 // render the scene
 onRenderFcts.push(function() {
   var i = 0;
@@ -502,13 +506,20 @@ onRenderFcts.push(function() {
 
   for (var ix = 0; ix < AMOUNTX; ix++) {
     for (var iy = 0; iy < AMOUNTY; iy++) {
-      var particle = particles[i++];
+
+      var curr = i++;
+      var particle = particles2[curr];
+      var particle3 = particles3[curr];
       if (instagramColor.length > 0) {
         var n = i % instagramColor.length;
 
         particle.material.color.r = instagramColor[n].r / 255;
         particle.material.color.g = instagramColor[n].g / 255;
         particle.material.color.b = instagramColor[n].b / 255;
+
+        particle3.material.color.r = instagramColor[n].r / 255;
+        particle3.material.color.g = instagramColor[n].g / 255;
+        particle3.material.color.b = instagramColor[n].b / 255;
       }
 
       particle.position.y = (Math.sin((ix + count) * 0.3) * 0.5) +
@@ -516,6 +527,13 @@ onRenderFcts.push(function() {
       /*CHANGE SHIMMER OF PARTICLES*/
       particle.scale.x = particle.scale.y = particle.scale.z = (Math.sin((ix + count) * 5) + 1) * 0.6 +
         (Math.sin((iy + count) * 0.5) + 1) * 0.6;
+
+      particle3.position.y = (Math.sin((ix + count) * 0.3) * 0.5) +
+        (Math.sin((iy + count) * 0.5) * 0.5);
+      /*CHANGE SHIMMER OF PARTICLES*/
+      particle3.scale.x = particle3.scale.y = particle3.scale.z = (Math.sin((ix + count) * 5) + 1) * 0.6 +
+        (Math.sin((iy + count) * 0.5) + 1) * 0.6;
+
     }
   }
 
