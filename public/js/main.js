@@ -199,9 +199,6 @@ var smoothedControls2 = new THREEx.ArSmoothedControls(smoothedRoot2, {
   lerpScale: 1,
 })
 
-
-
-
 var n = 0;
 for (var i = 0; i < AMOUNTX; i++) {
   for (var j = 0; j < AMOUNTY; j++) {
