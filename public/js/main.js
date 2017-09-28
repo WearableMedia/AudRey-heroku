@@ -494,7 +494,7 @@ onRenderFcts.push(function(delta) {
 //		render the whole thing on the page
 //////////////////////////////////////////////////////////////////////////////////
 var stats = new Stats();
-document.body.appendChild(stats.dom);
+//document.body.appendChild(stats.dom);
 // render the scene
 onRenderFcts.push(function() {
   var i = 0;
