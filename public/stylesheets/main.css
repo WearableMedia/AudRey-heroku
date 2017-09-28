@@ -12,6 +12,7 @@ h1{
 
 #main-container{
  z-index: 99 !important;
+ display: none;
  }
 
 /*#video-container{
