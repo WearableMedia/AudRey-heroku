@@ -83,9 +83,9 @@ scene.add(pointLight);
 //////////////////////////////////////////////////////////////////////////////////
 //		Initialize a particleSystem
 //////////////////////////////////////////////////////////////////////////////////
-var SEPARATION = 0.6,
-  AMOUNTX = 10,
-  AMOUNTY = 100;
+var SEPARATION = 0.3,
+  AMOUNTX = 5,
+  AMOUNTY = 40;
 var particles2 = new Array();
 var particles3 = new Array();
 var count = 0;
@@ -192,7 +192,7 @@ var markerRoot2 = new THREE.Group
 scene.add(markerRoot2)
 var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot2, {
   type: 'barcode',
-  barcodeValue: 29
+  barcodeValue: 29 //front top right
 })
 
 var smoothedRoot2 = new THREE.Group()
@@ -210,11 +210,11 @@ var smoothedControls2 = new THREEx.ArSmoothedControls(smoothedRoot2, {
 var n = 0;
 for (var i = 0; i < AMOUNTX; i++) {
   for (var j = 0; j < AMOUNTY; j++) {
-    var geometry = new THREE.SphereBufferGeometry(0.1, 48, 24);
+    var geometry = new THREE.SphereGeometry(0.08, 48, 24);
     var material = new THREE.MeshNormalMaterial();
     var sphere = particles2[n++] = new THREE.Mesh(geometry, material);
     sphere.position.x = i * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
-    sphere.position.z = j * SEPARATION - ((AMOUNTY * SEPARATION) / 2);
+    sphere.position.z = j * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
     //sphere.position.y=0.5;
     smoothedRoot2.add(sphere);
 
@@ -231,7 +231,7 @@ var markerRoot3 = new THREE.Group
 scene.add(markerRoot3)
 var artoolkitMarker = new THREEx.ArMarkerControls(arToolkitContext, markerRoot3, {
   type: 'barcode',
-  barcodeValue: 31
+  barcodeValue: 31  //back right
 })
 
 var smoothedRoot3 = new THREE.Group()
@@ -247,11 +247,11 @@ var smoothedControls3 = new THREEx.ArSmoothedControls(smoothedRoot3, {
 var n = 0;
 for (var i = 0; i < AMOUNTX; i++) {
   for (var j = 0; j < AMOUNTY; j++) {
-    var geometry = new THREE.SphereBufferGeometry(0.1, 48, 24);
+    var geometry = new THREE.BoxGeometry(0.08, 0.08, 0.08);
     var material = new THREE.MeshNormalMaterial();
     var sphere = particles3[n++] = new THREE.Mesh(geometry, material);
     sphere.position.x = i * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
-    sphere.position.z = j * SEPARATION - ((AMOUNTY * SEPARATION) / 2);
+    sphere.position.z = j * SEPARATION - ((AMOUNTX * SEPARATION) / 2);
     //sphere.position.y=0.5;
     smoothedRoot3.add(sphere);
 
@@ -512,14 +512,21 @@ onRenderFcts.push(function() {
       var particle3 = particles3[curr];
       if (instagramColor.length > 0) {
         var n = i % instagramColor.length;
+        var color = new THREE.Color(instagramColor[n].r / 255, instagramColor[n].g / 255, instagramColor[n].b / 255);
+        particle.material = new THREE.MeshBasicMaterial({
+          color:color
+        });
+        // particle.material.color.r = instagramColor[n].r / 255;
+        // particle.material.color.g = instagramColor[n].g / 255;
+        // particle.material.color.b = instagramColor[n].b / 255;
+        particle3.material = new THREE.MeshBasicMaterial({
+           transparent: true,
+          color: color
+        });
 
-        particle.material.color.r = instagramColor[n].r / 255;
-        particle.material.color.g = instagramColor[n].g / 255;
-        particle.material.color.b = instagramColor[n].b / 255;
-
-        particle3.material.color.r = instagramColor[n].r / 255;
-        particle3.material.color.g = instagramColor[n].g / 255;
-        particle3.material.color.b = instagramColor[n].b / 255;
+        // particle3.material.color.r = instagramColor[n].r / 255;
+        // particle3.material.color.g = instagramColor[n].g / 255;
+        // particle3.material.color.b = instagramColor[n].b / 255;
       }
 
       particle.position.y = (Math.sin((ix + count) * 0.3) * 0.5) +
