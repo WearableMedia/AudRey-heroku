@@ -32,9 +32,12 @@ app.get('/submit/:id', function(req, res) {
     var data = JSON.parse(body);
     var totalLikes = 0;
     var totalComments = 0;
+    var totalPics = 0;
+    var totalColors = 0;
     var allColors = [];
     var fullname = data.items[0].user.full_name;
     console.log(fullname);
+    totalPics=data.items.length;
     for (var i = 0; i < data.items.length; i++) {
       var imagePath = data.items[i].images.thumbnail.url;
       //console.log("likes: " + data.items[i].likes.count);
@@ -43,6 +46,7 @@ app.get('/submit/:id', function(req, res) {
       totalComments += data.items[i].comments.count;
       getColors(imagePath).then(colors => {
         // `colors` is an array of color objects
+        totalColors=colors.length;
         allColors.push(colors);
         if (allColors.length == data.items.length) {
           var output = {
