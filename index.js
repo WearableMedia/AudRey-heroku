@@ -53,6 +53,8 @@ app.get('/submit/:id', function(req, res) {
             "fullname":fullname,
             "likes": totalLikes,
             "comments": totalComments,
+            "totalPics":totalPics,
+            "totalColors":totalColors,
             "colors": allColors
           }
           res.send(output);
